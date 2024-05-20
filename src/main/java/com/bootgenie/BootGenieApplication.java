@@ -1,4 +1,4 @@
-package com.bootgenie.app;
+package com.bootgenie;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

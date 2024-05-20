@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayOutputStream;
 
 @RestController
-@RequestMapping("/api")
 public class ProjectController {
 
     @Autowired
