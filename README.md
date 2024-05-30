@@ -43,7 +43,7 @@
     - 구조 패턴에 따라 프로젝트를 생성
     - 각 클래스에 주석을 추가하여 역할 설명
 
-3. **Spring Initializr API**
+3. **Spring Initializer API**
     - 스프링 프로젝트 템플릿을 생성하기 위해 사용
 
 ### 데이터베이스 스키마
@@ -83,10 +83,11 @@
         - 사용자 피드백을 반영하여 UI/UX 개선
 
 3. **기술 스택**
-    - **프론트엔드**: React.js 또는 Vue.js, HTML, CSS, JavaScript
+    - **프론트엔드**: React
     - **백엔드**: Spring Boot, Java
-    - **빌드 도구**: Maven 또는 Gradle
-    - **배포**: Docker, Kubernetes(Optional)
+    - **빌드 도구**: gradle
+    - **배포**: Docker
+    - **Cloud**: AWS
 
 ## Milestones
 
