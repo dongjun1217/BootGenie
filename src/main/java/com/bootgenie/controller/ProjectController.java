@@ -1,14 +1,17 @@
 package com.bootgenie.controller;
 
-import com.bootgenie.model.ProjectRequest;
 import com.bootgenie.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 @RestController
 public class ProjectController {
@@ -16,14 +19,17 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
-    @PostMapping("/create-project")
-    public ResponseEntity<byte[]> createProject(@RequestBody ProjectRequest request) {
-        ByteArrayOutputStream byteArrayOutputStream = projectService.generateProject(request);
+    @GetMapping("/generateProject")
+    public ResponseEntity<InputStreamResource> generateProject(@RequestParam String projectName, @RequestParam String packageName,@RequestParam String pattern) throws IOException {
+        ByteArrayInputStream zipFile = projectService.generateProjectZip(projectName, packageName,pattern);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=project.zip");
-        headers.add(HttpHeaders.CONTENT_TYPE, "application/zip");
+        headers.add("Content-Disposition", "attachment; filename=" + projectName + ".zip");
 
-        return new ResponseEntity<>(byteArrayOutputStream.toByteArray(), headers, HttpStatus.OK);
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new InputStreamResource(zipFile));
     }
 }
