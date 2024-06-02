@@ -21,7 +21,7 @@ public class ProjectController {
 
     @GetMapping("/generateProject")
     public ResponseEntity<InputStreamResource> generateProject(@RequestParam String projectName, @RequestParam String packageName,@RequestParam String pattern) throws IOException {
-        ByteArrayInputStream zipFile = projectService.generateProjectZip(projectName, packageName,pattern);
+        ByteArrayInputStream zipFile = projectService.generateProject(projectName, packageName,pattern);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=" + projectName + ".zip");

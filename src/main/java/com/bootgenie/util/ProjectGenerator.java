@@ -1,66 +1,86 @@
 package com.bootgenie.util;
 
-import com.bootgenie.model.ProjectRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-/*
-
-    제네레이트 클래스별 메서드 구현하기 (컨트롤러, 서비스, 모델 등)
-
- */
 public class ProjectGenerator {
 
-    public static ByteArrayOutputStream generateProject(ProjectRequest request) {
-        try {
-            String projectName = request.getProjectName();
-            String basePath = System.getProperty("java.io.tmpdir") + "/" + projectName;
-            Files.createDirectories(Paths.get(basePath));
+    private static final String PATTERN_DIR = "patterns/";
+    private static final Logger log = LoggerFactory.getLogger(ProjectGenerator.class);
 
-            // Generate application class
-            String applicationClassContent = generateApplicationClass(request);
-            String packagePath = basePath + "/src/main/java/" + request.getPackageName().replace('.', '/');
-            Files.createDirectories(Paths.get(packagePath));
-            Files.write(Paths.get(packagePath, "Application.java"), applicationClassContent.getBytes());
+    public static ByteArrayInputStream generateProjectZip(String projectName, String packageName, String pattern) throws IOException {
+        Path tempDir = Files.createTempDirectory(projectName);
 
+        // Create the base directory structure
+        String baseDir = "src/main/java/" + packageName.replace('.', '/');
+        Path baseDirPath = tempDir.resolve(baseDir);
+        Files.createDirectories(baseDirPath);
 
-            // Create zip file
-            File zipFile = new File(basePath + ".zip");
-            ZipUtils.pack(new File(basePath), zipFile);
+        // Copy and modify files
+        copyAndModifyFiles(PATTERN_DIR + pattern, baseDirPath, packageName);
 
-            // Convert zip file to ByteArrayOutputStream
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            try (FileOutputStream fos = new FileOutputStream(zipFile)) {
-                byteArrayOutputStream.write(Files.readAllBytes(zipFile.toPath()));
-            }
-
-            return byteArrayOutputStream;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to generate project", e);
+        // Create ZIP file
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
+            Path sourceDir = tempDir;
+            Files.walk(sourceDir).filter(path -> !Files.isDirectory(path)).forEach(path -> {
+                String zipEntryName = sourceDir.relativize(path).toString();
+                try {
+                    zos.putNextEntry(new ZipEntry(zipEntryName));
+                    Files.copy(path, zos);
+                    zos.closeEntry();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
+
+        // Clean up temporary files
+        deleteDirectory(tempDir.toFile());
+        log.info("generateProjectZip :: {} ,프로젝트 생성에 성공했습니다.", projectName);
+
+        return new ByteArrayInputStream(baos.toByteArray());
     }
 
-    private static String generateApplicationClass(ProjectRequest request) {
-
-
-        return "package " + request.getPackageName() + ";\n\n" +
-                "import org.springframework.boot.SpringApplication;\n" +
-                "import org.springframework.boot.autoconfigure.SpringBootApplication;\n\n" +
-                "@SpringBootApplication\n" +
-                "public class Application {\n" +
-                "    public static void main(String[] args) {\n" +
-                "        SpringApplication.run(Application.class, args);\n" +
-                "    }\n" +
-                "}\n";
+    private static void copyAndModifyFiles(String sourceDir, Path targetDir, String packageName) throws IOException {
+        Files.walk(Paths.get(sourceDir)).forEach(sourcePath -> {
+            try {
+                Path targetPath = targetDir.resolve(Paths.get(sourceDir).relativize(sourcePath));
+                if (Files.isDirectory(sourcePath)) {
+                    Files.createDirectories(targetPath);
+                } else {
+                    Files.copy(sourcePath, targetPath);
+                    if (sourcePath.toString().endsWith(".java")) {
+                        modifyJavaFile(targetPath, packageName);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        log.info("copyAndModifyFiles :: {} ,복사 및 수정이 성공했습니다.", packageName);
     }
 
+    private static void modifyJavaFile(Path javaFilePath, String packageName) throws IOException {
+        String content = new String(Files.readAllBytes(javaFilePath));
+        content = content.replace("{BootGenie}", packageName);
+        Files.write(javaFilePath, content.getBytes());
+        log.info("modifyJavaFile :: {} ,파일의 수정이 완료되었습니다.", javaFilePath);
 
-    private static String generateHeader(String packageName){
+    }
 
-        return "";
+    private static void deleteDirectory(File file) throws IOException {
+        if (file.isDirectory()) {
+            for (File child : file.listFiles()) {
+                deleteDirectory(child);
+            }
+            log.info("deleteDirectory :: {} 디렉토리가 정상적으로 제거되었습니다.",file.getName());
+        }
+        file.delete();
     }
 }
