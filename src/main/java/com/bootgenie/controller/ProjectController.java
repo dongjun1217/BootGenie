@@ -14,6 +14,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/projects")
+@CrossOrigin(origins="*", allowedHeaders = "*")
 public class ProjectController {
 
     @Autowired

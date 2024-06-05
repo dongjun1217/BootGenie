@@ -13,40 +13,38 @@ public class BuildGradleWriter {
         DependencyHandler dependencyHandler = new DependencyHandler(dependencies);
         StringBuilder buildGradleContent = new StringBuilder();
 
-        buildGradleContent.append(String.format("""
-            plugins {
-              id 'java'
-              %s
-              id 'org.springframework.boot' version '%s'
-              id 'io.spring.dependency-management' version '1.1.5'
-              %s
-            }
-
-            group = 'com.example'
-            version = '0.0.1-SNAPSHOT'
-
-            java {
-              toolchain {
-                languageVersion = JavaLanguageVersion.of(%s)
-              }
-            }
-
-            repositories {
-              mavenCentral()
-            }
-
-            dependencies {
-              implementation 'org.springframework.boot:spring-boot-starter'
-              %s
-              testImplementation 'org.springframework.boot:spring-boot-starter-test'
-              testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-            }
-
-            tasks.named('test') {
-              useJUnitPlatform()
-            }
-            """,
-                "war".equalsIgnoreCase(packagingType) ? "id 'war'" : "",
+        buildGradleContent.append(String.format(
+            "plugins {\n"+
+            "  id 'java'\n"+
+            "%s"+
+            "  id 'org.springframework.boot' version '%s'\n"+
+            "  id 'io.spring.dependency-management' version '1.1.5'\n"+
+            "  %s"+
+            "}\n"+
+            "\n"+
+            "group = 'com.example'\n"+
+            "version = '0.0.1-SNAPSHOT'\n"+
+            "\n"+
+            "java {\n"+
+            "  sourceCompatibility = '%s'\n"+
+            "}\n"+
+            "\n"+
+            "repositories {\n"+
+            "  mavenCentral()\n"+
+            "}\n"+
+            "\n"+
+            "dependencies {\n"+
+            "  implementation 'org.springframework.boot:spring-boot-starter'\n"+
+            "  %s"+
+            "  testImplementation 'org.springframework.boot:spring-boot-starter-test'\n"+
+            "  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'\n"+
+            "}\n"+
+            "\n"+
+            "tasks.named('test') {\n"+
+            "  useJUnitPlatform()\n"+
+            "\n}"
+            ,
+                "war".equalsIgnoreCase(packagingType) ? "  id 'war'\n" : "",
                 springBootVersion,
                 dependencyHandler.getPlugins(),
                 javaVersion,
@@ -55,6 +53,7 @@ public class BuildGradleWriter {
 
         buildGradleContent.append(dependencyHandler.getConfigurations());
         buildGradleContent.append(dependencyHandler.getGenerateJava());
+
 
         Files.writeString(path.resolve("build.gradle"), buildGradleContent.toString());
     }
