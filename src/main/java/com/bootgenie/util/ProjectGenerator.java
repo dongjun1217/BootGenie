@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.*;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -13,7 +14,7 @@ public class ProjectGenerator {
     private static final String PATTERN_DIR = "patterns/";
     private static final Logger log = LoggerFactory.getLogger(ProjectGenerator.class);
 
-    public static ByteArrayInputStream generateProjectZip(String projectName, String packageName, String pattern) throws IOException {
+    public static ByteArrayInputStream generateProjectZip(String projectName, String packageName, String pattern, String javaVersion, String springBootVersion, String packagingType, List<String> dependencies) throws IOException {
         Path tempDir = Files.createTempDirectory(projectName);
 
         // Create the base directory structure
@@ -23,6 +24,10 @@ public class ProjectGenerator {
 
         // Copy and modify files
         copyAndModifyFiles(PATTERN_DIR + pattern, baseDirPath, packageName);
+
+        // Create build.gradle file using BuildGradleWriter
+        BuildGradleWriter buildGradleWriter = new BuildGradleWriter();
+        buildGradleWriter.writeTo(tempDir, javaVersion, springBootVersion, packagingType, dependencies);
 
         // Create ZIP file
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -71,7 +76,6 @@ public class ProjectGenerator {
         content = content.replace("{BootGenie}", packageName);
         Files.write(javaFilePath, content.getBytes());
         log.info("modifyJavaFile :: {} ,파일의 수정이 완료되었습니다.", javaFilePath);
-
     }
 
     private static void deleteDirectory(File file) throws IOException {
@@ -79,7 +83,7 @@ public class ProjectGenerator {
             for (File child : file.listFiles()) {
                 deleteDirectory(child);
             }
-            log.info("deleteDirectory :: {} 디렉토리가 정상적으로 제거되었습니다.",file.getName());
+            log.info("deleteDirectory :: {} 디렉토리가 정상적으로 제거되었습니다.", file.getName());
         }
         file.delete();
     }
