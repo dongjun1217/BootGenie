@@ -29,10 +29,17 @@ public class BuildGradleWriter {
                         "}\n" +
                         "\n" +
                         "repositories {\n" +
-                        "  mavenCentral()\n" +
-                        "}\n",
+                        "  mavenCentral()\n",
                 springBootVersion, dependencyHandler.getPlugins(), javaVersion
         ));
+
+        if (dependencyHandler.hasAdditionalRepositories()) {
+            buildGradleContent.append(
+                    "  maven { url 'https://repo.spring.io/milestone' }\n"
+            );
+        }
+
+        buildGradleContent.append("}\n");
 
         if (dependencyHandler.hasExt()) {
             buildGradleContent.append(String.format(
