@@ -14,7 +14,15 @@ public class ProjectGenerator {
     private static final String PATTERN_DIR = "bg-patterns/";
     private static final Logger log = LoggerFactory.getLogger(ProjectGenerator.class);
 
-    public static ByteArrayInputStream generateProjectZip(String projectName, String packageName, String pattern, String javaVersion, String springBootVersion, String packagingType, List<String> dependencies) throws IOException {
+    public static ByteArrayInputStream generateProjectZip(
+            String projectName,
+            String packageName,
+            String pattern,
+            String javaVersion,
+            String springBootVersion,
+            String packagingType,
+            List<String> dependencies) throws IOException {
+
         Path tempDir = Files.createTempDirectory(projectName);
 
         // Create the base directory structure

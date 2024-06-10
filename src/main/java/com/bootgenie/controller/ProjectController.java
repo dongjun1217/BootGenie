@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/projects")
@@ -23,14 +25,20 @@ public class ProjectController {
     @PostMapping("/generate")
     public ResponseEntity<InputStreamResource> generateProject(@RequestBody ProjectRequest projectRequest) {
         try {
+            List<String> dependencies = projectRequest.getSelectedDependencies()
+                    .stream()
+                    .map(ProjectRequest.Dependency::getName)
+                    .collect(Collectors.toList());
+
+
             ByteArrayInputStream projectStream = projectService.generateProject(
                     projectRequest.getProjectName(),
-                    projectRequest.getPackageName(),
+                    projectRequest.getProjectPackageName(),
                     projectRequest.getPattern(),
                     projectRequest.getJavaVersion(),
                     projectRequest.getSpringBootVersion(),
-                    projectRequest.getPackagingType(),
-                    projectRequest.getDependencies()
+                    projectRequest.getPackaging(),
+                    dependencies
             );
 
             HttpHeaders headers = new HttpHeaders();

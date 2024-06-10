@@ -4,38 +4,63 @@ import java.util.List;
 
 public class ProjectRequest {
 
-    private String projectName;
-    private String packageName;
-    private String pattern;
+    private String projectType;
+    private String language;
+    private String packaging;
     private String javaVersion;
     private String springBootVersion;
-    private String packagingType;
-    private List<String> dependencies;
+    private String pattern;
+    private String projectGroup;
+    private String projectArtifact;
+    private String projectName;
+    private String projectPackageName;
+    private List<Dependency> selectedDependencies;
 
-    // Getters and Setters
+    public static class Dependency {
+        private int id;
+        private String name;
 
-    public String getProjectName() {
-        return projectName;
+        // Getters and setters
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public String getProjectType() {
+        return projectType;
     }
 
-    public String getPackageName() {
-        return packageName;
+    public void setProjectType(String projectType) {
+        this.projectType = projectType;
     }
 
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
+    public String getLanguage() {
+        return language;
     }
 
-    public String getPattern() {
-        return pattern;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
+    public String getPackaging() {
+        return packaging;
+    }
+
+    public void setPackaging(String packaging) {
+        this.packaging = packaging;
     }
 
     public String getJavaVersion() {
@@ -54,19 +79,51 @@ public class ProjectRequest {
         this.springBootVersion = springBootVersion;
     }
 
-    public String getPackagingType() {
-        return packagingType;
+    public String getPattern() {
+        return pattern;
     }
 
-    public void setPackagingType(String packagingType) {
-        this.packagingType = packagingType;
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
     }
 
-    public List<String> getDependencies() {
-        return dependencies;
+    public String getProjectGroup() {
+        return projectGroup;
     }
 
-    public void setDependencies(List<String> dependencies) {
-        this.dependencies = dependencies;
+    public void setProjectGroup(String projectGroup) {
+        this.projectGroup = projectGroup;
+    }
+
+    public String getProjectArtifact() {
+        return projectArtifact;
+    }
+
+    public void setProjectArtifact(String projectArtifact) {
+        this.projectArtifact = projectArtifact;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getProjectPackageName() {
+        return projectPackageName;
+    }
+
+    public void setProjectPackageName(String projectPackageName) {
+        this.projectPackageName = projectPackageName;
+    }
+
+    public List<Dependency> getSelectedDependencies() {
+        return selectedDependencies;
+    }
+
+    public void setSelectedDependencies(List<Dependency> selectedDependencies) {
+        this.selectedDependencies = selectedDependencies;
     }
 }
