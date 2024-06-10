@@ -14,46 +14,51 @@ public class BuildGradleWriter {
         StringBuilder buildGradleContent = new StringBuilder();
 
         buildGradleContent.append(String.format(
-            "plugins {\n"+
-            "  id 'java'\n"+
-            "%s"+
-            "  id 'org.springframework.boot' version '%s'\n"+
-            "  id 'io.spring.dependency-management' version '1.1.5'\n"+
-            "  %s"+
-            "}\n"+
-            "\n"+
-            "group = 'com.example'\n"+
-            "version = '0.0.1-SNAPSHOT'\n"+
-            "\n"+
-            "java {\n"+
-            "  sourceCompatibility = '%s'\n"+
-            "}\n"+
-            "\n"+
-            "repositories {\n"+
-            "  mavenCentral()\n"+
-            "}\n"+
-            "\n"+
-            "dependencies {\n"+
-            "  implementation 'org.springframework.boot:spring-boot-starter'\n"+
-            "  %s"+
-            "  testImplementation 'org.springframework.boot:spring-boot-starter-test'\n"+
-            "  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'\n"+
-            "}\n"+
-            "\n"+
-            "tasks.named('test') {\n"+
-            "  useJUnitPlatform()\n"+
-            "\n}"
-            ,
-                "war".equalsIgnoreCase(packagingType) ? "  id 'war'\n" : "",
-                springBootVersion,
-                dependencyHandler.getPlugins(),
-                javaVersion,
+                "plugins {\n" +
+                        "  id 'java'\n" +
+                        "  id 'org.springframework.boot' version '%s'\n" +
+                        "  id 'io.spring.dependency-management' version '1.1.4'\n" +
+                        "%s\n" +
+                        "}\n" +
+                        "\n" +
+                        "group = 'com.example'\n" +
+                        "version = '0.0.1-SNAPSHOT'\n" +
+                        "\n" +
+                        "java {\n" +
+                        "  sourceCompatibility = '%s'\n" +
+                        "}\n" +
+                        "\n" +
+                        "repositories {\n" +
+                        "  mavenCentral()\n" +
+                        "}\n",
+                springBootVersion, dependencyHandler.getPlugins(), javaVersion
+        ));
+
+        if (dependencyHandler.hasExt()) {
+            buildGradleContent.append(String.format(
+                    "\next {\n" +
+                            "%s\n" +
+                            "}\n",
+                    dependencyHandler.getExt()
+            ));
+        }
+
+        buildGradleContent.append(String.format(
+                "\ndependencies {\n" +
+                        "  implementation 'org.springframework.boot:spring-boot-starter'\n" +
+                        "  testImplementation 'org.springframework.boot:spring-boot-starter-test'\n" +
+                        "  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'\n" +
+                        "%s\n" +
+                        "}\n" +
+                        "\n" +
+                        "tasks.named('test') {\n" +
+                        "  useJUnitPlatform()\n" +
+                        "}\n",
                 dependencyHandler.getDependencies()
         ));
 
         buildGradleContent.append(dependencyHandler.getConfigurations());
         buildGradleContent.append(dependencyHandler.getGenerateJava());
-
 
         Files.writeString(path.resolve("build.gradle"), buildGradleContent.toString());
     }
