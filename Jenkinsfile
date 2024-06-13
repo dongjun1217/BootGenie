@@ -7,14 +7,14 @@ node {
 
     // Docker Build 단계: Docker 이미지를 빌드합니다.
     stage('Docker Build') {
-        sh 'docker build -t 110.15.58.113:8081/repository/bootgenie:latest .' // Docker 이미지를 Nexus 레지스트리에 태그를 붙여 빌드합니다.
+        sh 'docker build -t 110.15.58.113:8081/repository/app-test:latest .' // Docker 이미지를 Nexus 레지스트리에 태그를 붙여 빌드합니다.
     }
 
     // Docker Push 단계: 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
     stage('Docker Push') {
         withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-            sh 'echo $NEXUS_PASSWORD | docker login -u $NEXUS_USERNAME --password-stdin http://110.15.58.113:8081/repository/bootgenie-docker/' // Nexus 레지스트리에 로그인합니다.
-            sh 'docker push 110.15.58.113:5443/repository/bootgenie:latest' // 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
+            sh 'echo $NEXUS_PASSWORD | docker login -u $NEXUS_USERNAME --password-stdin http://110.15.58.113:8081' // Nexus 레지스트리에 로그인합니다.
+            sh 'docker push 110.15.58.113:8081/repository/app-test:latest' // 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
         }
     }
 
