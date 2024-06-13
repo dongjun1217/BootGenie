@@ -14,14 +14,14 @@ node {
     stage('Docker Push') {
         withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
             sh 'echo $NEXUS_PASSWORD | docker login -u $NEXUS_USERNAME --password-stdin http://110.15.58.113:8081/repository/bootgenie-docker/' // Nexus 레지스트리에 로그인합니다.
-            sh 'docker push 110.15.58.113:8081/repository/bootgenie:latest' // 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
+            sh 'docker push 110.15.58.113:5443/repository/bootgenie:latest' // 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
         }
     }
 
     // Tag Version Up 단계: Git 태그를 증가시키고 푸시합니다.
     stage('Tag Version Up') {
         script {
-            // 최신 태그를 가져와 버전을 증가시킵니다.
+            // 최신 태그를 가져와 버전을 증가시킵니다.  
             def version = sh(script: "git describe --tags --abbrev=0", returnStdout: true).trim()
             def (major, minor, patch) = version.tokenize('.').collect { it.toInteger() }
             patch += 1
