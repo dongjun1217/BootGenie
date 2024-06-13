@@ -1,16 +1,20 @@
-############# TEST #################
+# 공식 Python 이미지를 베이스 이미지로 사용
+FROM python:3.9-slim
 
-# Use the official OpenJDK 11 image as the base image
-FROM openjdk:11-jre-slim
-
-# Set the working directory in the container
+# 컨테이너의 작업 디렉토리를 /app으로 설정
 WORKDIR /app
 
-# Copy the built JAR file from the host to the container
-COPY target/your-app.jar app.jar
+# 현재 디렉토리의 내용을 컨테이너의 /app에 복사
+COPY . /app
 
-# Expose the port the application runs on
-EXPOSE 8080
+# requirements.txt에 명시된 필요한 패키지를 설치
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Command to run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# 이 컨테이너 외부에서 접근할 수 있도록 포트 80을 개방
+EXPOSE 80
+
+# 환경 변수를 설정
+ENV NAME World
+
+# 컨테이너가 실행될 때 app.py를 실행
+CMD ["python", "app.py"]
