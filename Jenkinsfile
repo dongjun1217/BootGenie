@@ -13,7 +13,7 @@ node {
     // Docker Push 단계: 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
     stage('Docker Push') {
         withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-            sh 'docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD http://110.15.58.113:8081/#browse/browse:bootgenie-docker' // Nexus 레지스트리에 로그인합니다.
+            sh 'docker login -u $NEXUS_USERNAME -p $NEXUS_PASSWORD http://110.15.58.113:8081/repository/bootgenie-docker/' // Nexus 레지스트리에 로그인합니다.
             sh 'docker push 110.15.58.113:8081/repository/bootgenie:latest' // 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
         }
     }
@@ -32,7 +32,7 @@ node {
             withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                 sh """
                     git config user.name '${GIT_USERNAME}' // Git 사용자 이름 설정
-                    git config user.email 'your-github-email@example.com' // Git 사용자 이메일 설정
+                    git config user.email 'donghyun4591@gmail.com' // Git 사용자 이메일 설정
                     git push origin ${newVersion} // 새로운 태그를 원격 저장소에 푸시
                 """
             }
