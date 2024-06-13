@@ -33,7 +33,7 @@ node {
             withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                 sh """
                     git config user.name '${GIT_USERNAME}'
-                    git config user.email 'your-github-email@example.com'
+                    git config user.email 'donghyun4591@gmail.com'
                     git push origin ${newVersion}
                 """
             }
