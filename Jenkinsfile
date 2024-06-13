@@ -21,12 +21,12 @@ node {
     // Tag Version Up 단계: Git 태그를 증가시키고 푸시합니다.
     stage('Tag Version Up') {
         script {
-            // 최신 태그를 가져와 버전을 증가시킵니다.  
+            // 최신 태그를 가져와 버전을 증가시킵니다.
             def version = sh(script: "git describe --tags --abbrev=0", returnStdout: true).trim()
             def (major, minor, patch) = version.tokenize('.').collect { it.toInteger() }
             patch += 1
             def newVersion = "${major}.${minor}.${patch}"
-            
+
             // 새로운 태그를 생성하고 푸시합니다.
             sh "git tag -a ${newVersion} -m 'Version ${newVersion}'"
             withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
