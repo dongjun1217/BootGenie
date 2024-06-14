@@ -23,20 +23,20 @@ node {
     // Tag Version Up 단계: Git 태그를 증가시키고 푸시합니다.
     stage('Tag Version Up') {
         script {
-            // 최신 태그를 가져와 버전을 증가시킵니다. 태그가 없으면 기본 태그로 0.0.0을 사용합니다.
-            def version = sh(script: "git describe --tags --abbrev=0 || echo '0.0.0'", returnStdout: true).trim()
-            def (major, minor, patch) = version.tokenize('.').collect { it.toInteger() }
-            patch += 1 // 패치 번호를 증가시킵니다.
-            def newVersion = "${major}.${minor}.${patch}"
-
-            // 새로운 태그를 생성하고 푸시합니다.
-            sh "git tag -a ${newVersion} -m 'Version ${newVersion}'"
             withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-                sh """
-                    git config user.name '${GIT_USERNAME}' // Git 사용자 이름 설정
-                    git config user.email 'donghyun4591@gmail.com' // Git 사용자 이메일 설정
-                    git push origin ${newVersion} // 새로운 태그를 원격 저장소에 푸시
-                """
+                // Git 사용자 이름과 이메일을 전역 설정으로 설정
+                sh 'git config --global user.name "${GIT_USERNAME}"'
+                sh 'git config --global user.email "donghyun4591@gmail.com"'
+
+                // 최신 태그를 가져와 버전을 증가시킵니다. 태그가 없으면 기본 태그로 0.0.0을 사용합니다.
+                def version = sh(script: "git describe --tags --abbrev=0 || echo '0.0.0'", returnStdout: true).trim()
+                def (major, minor, patch) = version.tokenize('.').collect { it.toInteger() }
+                patch += 1 // 패치 번호를 증가시킵니다.
+                def newVersion = "${major}.${minor}.${patch}"
+
+                // 새로운 태그를 생성하고 푸시합니다.
+                sh "git tag -a ${newVersion} -m 'Version ${newVersion}'"
+                sh 'git push origin ${newVersion}' // 새로운 태그를 원격 저장소에 푸시
             }
         }
     }
