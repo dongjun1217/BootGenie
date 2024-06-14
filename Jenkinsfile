@@ -23,6 +23,10 @@ node {
     // Tag Version Up 단계: Git 태그를 증가시키고 푸시합니다.
     stage('Tag Version Up') {
         script {
+            // Git 사용자 이름과 이메일 설정
+            sh 'git config user.email "donghyun4591@gmail.com"'
+            sh 'git config user.name "donghyeonshin"'
+
             // 최신 태그를 가져와 버전을 증가시킵니다. 태그가 없으면 기본 태그로 0.0.0을 사용합니다.
             def version = sh(script: "git describe --tags --abbrev=0 || echo '0.0.0'", returnStdout: true).trim()
             def (major, minor, patch) = version.tokenize('.').collect { it.toInteger() }
