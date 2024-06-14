@@ -35,7 +35,7 @@ node {
 
             // 새로운 태그를 생성하고 푸시합니다.
             sh "git tag -a ${newVersion} -m 'Version ${newVersion}'"
-            withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+            withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                 sh """
                     git config user.name '${GIT_USERNAME}' // Git 사용자 이름 설정
                     git config user.email 'donghyun4591@gmail.com' // Git 사용자 이메일 설정
