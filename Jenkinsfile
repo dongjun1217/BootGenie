@@ -13,18 +13,20 @@ node {
     // Docker Push 단계: 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
     stage('Docker Push') {
         withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-            sh 'echo $NEXUS_PASSWORD | docker login -u $NEXUS_USERNAME --password-stdin http://110.15.58.113:8083' // Nexus 레지스트리에 로그인합니다.
-            sh 'docker push 110.15.58.113:8083/repository/app-test:latest' // 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
+            // Nexus 레지스트리에 로그인합니다.
+            sh 'echo $NEXUS_PASSWORD | docker login -u $NEXUS_USERNAME --password-stdin http://110.15.58.113:8083'
+            // 빌드된 Docker 이미지를 Nexus 레지스트리에 푸시합니다.
+            sh 'docker push 110.15.58.113:8083/repository/app-test:latest'
         }
     }
 
     // Tag Version Up 단계: Git 태그를 증가시키고 푸시합니다.
     stage('Tag Version Up') {
         script {
-            // 최신 태그를 가져와 버전을 증가시킵니다.
-            def version = sh(script: "git describe --tags --abbrev=0", returnStdout: true).trim()
+            // 최신 태그를 가져와 버전을 증가시킵니다. 태그가 없으면 기본 태그로 0.0.0을 사용합니다.
+            def version = sh(script: "git describe --tags --abbrev=0 || echo '0.0.0'", returnStdout: true).trim()
             def (major, minor, patch) = version.tokenize('.').collect { it.toInteger() }
-            patch += 1
+            patch += 1 // 패치 번호를 증가시킵니다.
             def newVersion = "${major}.${minor}.${patch}"
 
             // 새로운 태그를 생성하고 푸시합니다.
