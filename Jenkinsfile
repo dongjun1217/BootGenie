@@ -41,10 +41,8 @@ node {
                 sh 'git checkout master' // 여기서 main 또는 원격 브랜치 이름으로 변경
 
                 // 푸시할 때 브랜치 이름 명시
-                sh "git push origin HEAD:master" // 여기도 master 또는 푸시하려는 원격 브랜치 이름
-
-                // 새로운 태그를 원격 저장소에 푸시
-                sh "git push origin ${newVersion}"
+                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/dongkoony/BootGenie.git HEAD:master"
+                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/dongkoony/BootGenie.git ${newVersion}"
             }
         }
     }
