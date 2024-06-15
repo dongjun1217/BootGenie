@@ -36,7 +36,15 @@ node {
 
                 // 새로운 태그를 생성하고 푸시합니다.
                 sh "git tag -a ${newVersion} -m 'Version ${newVersion}'"
-                sh 'git push origin ${newVersion}' // 새로운 태그를 원격 저장소에 푸시
+
+                // 브랜치 명시적으로 체크아웃
+                sh 'git checkout main' // 여기서 main 또는 원격 브랜치 이름으로 변경
+
+                // 푸시할 때 브랜치 이름 명시
+                sh "git push origin HEAD:main" // 여기도 main 또는 푸시하려는 원격 브랜치 이름
+
+                // 새로운 태그를 원격 저장소에 푸시
+                sh "git push origin ${newVersion}"
             }
         }
     }
