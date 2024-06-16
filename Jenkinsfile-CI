@@ -15,10 +15,7 @@ pipeline {
 
         stage('Gradle Build') {
             steps {
-                // 환경 변수 JAVA_HOME을 Jenkins에서 설정된 JDK 17 경로로 설정
-                withEnv(["JAVA_HOME=${tool name: 'jdk17', type: 'jdk'}", "PATH+JDK=${tool name: 'jdk17', type: 'jdk'}/bin"]) {
-                    sh './gradlew clean build' // Gradle Wrapper를 사용하여 빌드
-                }
+                sh './gradlew clean build' // Gradle Wrapper를 사용하여 빌드
             }
         }
 
