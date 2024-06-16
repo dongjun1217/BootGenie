@@ -15,6 +15,14 @@ pipeline {
 
         stage('Gradle Build') {
             steps {
+                // JDK 17 환경 설정
+                script {
+                    def jdkHome = tool name: 'jdk17', type: 'jdk'
+                    env.JAVA_HOME = "${jdkHome}"
+                    env.PATH = "${jdkHome}/bin:${env.PATH}"
+                    echo "JAVA_HOME is set to ${env.JAVA_HOME}"
+                    sh 'java -version' // JDK 버전 확인을 위한 추가 명령어
+                }
                 sh './gradlew clean build' // Gradle Wrapper를 사용하여 빌드
             }
         }
