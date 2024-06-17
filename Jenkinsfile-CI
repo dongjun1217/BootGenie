@@ -51,7 +51,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
                         // Git 사용자 이름과 이메일을 전역 설정으로 설정
                         sh 'git config --global user.name "${GIT_USERNAME}"'
-                        sh 'git config --global user.email "donghyun4591@gmail.com"'
+                        sh 'git config --global user.email "ehdwns9294@naver.com"'
 
                         // 새로운 태그를 생성하고 푸시합니다.
                         sh "git tag -a ${env.NEW_VERSION} -m 'Version ${env.NEW_VERSION}'"
@@ -60,8 +60,8 @@ pipeline {
                         sh 'git checkout master' // 여기서 main 또는 원격 브랜치 이름으로 변경
 
                         // 푸시할 때 브랜치 이름 명시
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/dongkoony/BootGenie.git HEAD:master"
-                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/dongkoony/BootGenie.git ${env.NEW_VERSION}"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/dongjun1217/BootGenie.git HEAD:master"
+                        sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/dongjun1217/BootGenie.git ${env.NEW_VERSION}"
                     }
                 }
             }
