@@ -1,55 +1,72 @@
-node {
-    // 환경 변수 설정
-    def dockerImage = "110.15.58.113:8083/repository/boot-genie-app:${VERSION_TAG}" // 파라미터로 받은 버전 태그 사용
-    def stackName = "boot-genie"
-    def composeFile = "boot-genie.yml"
+pipeline {
+    agent any
 
-    // Docker Pull 단계: Nexus 레지스트리에서 최신 Docker 이미지를 가져옵니다.
-    stage('Docker Pull') {
-        withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-            // Nexus 레지스트리에 로그인합니다.
-            sh 'echo $NEXUS_PASSWORD | docker login -u $NEXUS_USERNAME --password-stdin http://110.15.58.113:8083'
-            // 최신 Docker 이미지를 가져옵니다.
-            sh "docker pull ${dockerImage}"
+    parameters {
+        string(name: 'VERSION_TAG', defaultValue: '', description: 'The version tag of the Docker image to deploy')
+    }
+
+    stages {
+        stage('Docker Pull') {
+            steps {
+                script {
+                    def dockerImage = "110.15.58.113:8083/repository/boot-genie-app:${params.VERSION_TAG}" // 파라미터로 받은 버전 태그 사용
+                    withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                        // Nexus 레지스트리에 로그인합니다.
+                        sh 'echo $NEXUS_PASSWORD | docker login -u $NEXUS_USERNAME --password-stdin http://110.15.58.113:8083'
+                        // 최신 Docker 이미지를 가져옵니다.
+                        sh "docker pull ${dockerImage}"
+                    }
+                }
+            }
         }
-    }
 
-    // Docker Compose 파일 준비 단계
-    stage('Prepare Docker Compose') {
-        writeFile file: composeFile, text: """
-        version: '3.8'
+        stage('Prepare Docker Compose') {
+            steps {
+                script {
+                    def composeFile = "boot-genie.yml"
+                    def dockerImage = "110.15.58.113:8083/repository/boot-genie-app:${params.VERSION_TAG}"
+                    writeFile file: composeFile, text: """
+                    version: '3.8'
 
-        services:
-          app:
-            image: ${dockerImage}
-            deploy:
-              replicas: 1
-              update_config:
-                parallelism: 2
-                delay: 10s
-              restart_policy:
-                condition: on-failure
-            ports:
-              - "7435:7435"
-            environment:
-              - JAVA_OPTS=-DprojectName=boot-genie
-            logging:
-              driver: json-file
-              options:
-                max-size: "10m"
-                max-file: "3"
-            networks:
-              - app-net
+                    services:
+                      app:
+                        image: ${dockerImage}
+                        deploy:
+                          replicas: 1
+                          update_config:
+                            parallelism: 2
+                            delay: 10s
+                          restart_policy:
+                            condition: on-failure
+                        ports:
+                          - "7435:7435"
+                        environment:
+                          - JAVA_OPTS=-DprojectName=boot-genie
+                        logging:
+                          driver: json-file
+                          options:
+                            max-size: "10m"
+                            max-file: "3"
+                        networks:
+                          - app-net
 
-        networks:
-          app-net:
-            driver: overlay
-        """
-    }
+                    networks:
+                      app-net:
+                        driver: overlay
+                    """
+                }
+            }
+        }
 
-    // Deploy 단계: 새로운 버전을 Docker Swarm에 배포합니다.
-    stage('Deploy to Docker Swarm') {
-        // Docker Swarm에 스택을 배포합니다.
-        sh "docker stack deploy -c ${composeFile} ${stackName}"
+        stage('Deploy to Docker Swarm') {
+            steps {
+                script {
+                    def stackName = "boot-genie"
+                    def composeFile = "boot-genie.yml"
+                    // Docker Swarm에 스택을 배포합니다.
+                    sh "docker stack deploy -c ${composeFile} ${stackName}"
+                }
+            }
+        }
     }
 }
