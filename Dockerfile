@@ -23,7 +23,7 @@ RUN mkdir -p /app/boot-genie
 WORKDIR /app/boot-genie
 
 # Copy JAR file
-ARG JAR_FILE=build/libs/*.jar
+ARG JAR_FILE=build/libs/bootgenie-app-0.0.1-SNAPSHOT.jar
 COPY $JAR_FILE boot-genie.jar
 
 # Run the application
