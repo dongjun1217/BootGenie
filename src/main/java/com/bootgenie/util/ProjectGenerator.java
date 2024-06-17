@@ -56,7 +56,7 @@ public class ProjectGenerator {
                     zos.putNextEntry(new ZipEntry(zipEntryName));
                     Files.copy(path, zos);
                     zos.closeEntry();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
@@ -84,7 +84,7 @@ public class ProjectGenerator {
                         modifyJavaFile(targetPath, name);
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

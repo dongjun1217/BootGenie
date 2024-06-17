@@ -22,6 +22,11 @@ ENV LANG=ko_KR.UTF-8 \
 RUN mkdir -p /app/boot-genie
 WORKDIR /app/boot-genie
 
+# Copy the bg folders to the image
+COPY bg-patterns /app/boot-genie/bg-patterns
+COPY bg-test /app/boot-genie/bg-test
+COPY bg-gradle /app/boot-genie/bg-gradle
+
 # Copy JAR file
 ARG JAR_FILE=build/libs/bootgenie-app-0.0.1-SNAPSHOT.jar
 COPY $JAR_FILE boot-genie.jar
