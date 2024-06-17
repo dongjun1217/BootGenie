@@ -24,7 +24,7 @@ WORKDIR /app/boot-genie
 
 # Copy JAR file
 ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} /app/boot-genie/boot-genie.jar
+COPY $JAR_FILE boot-genie.jar
 
 # Run the application
 ENTRYPOINT ["java", "-DprojectName=boot-genie", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "boot-genie.jar"]
