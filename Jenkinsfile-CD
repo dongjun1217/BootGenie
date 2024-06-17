@@ -1,6 +1,6 @@
 node {
     // 환경 변수 설정
-    def dockerImage = "110.15.58.113:8083/repository/boot-genie-app:latest"
+    def dockerImage = "110.15.58.113:8083/repository/boot-genie-app:${env.VERSION_TAG}" // 버전 태그 사용
     def stackName = "boot-genie"
     def composeFile = "boot-genie.yml"
 

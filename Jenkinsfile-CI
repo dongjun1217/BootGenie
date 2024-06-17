@@ -66,5 +66,11 @@ pipeline {
                 }
             }
         }
+
+        stage('Trigger CD Pipeline') {
+            steps {
+                build job: 'Boot-Genie-APP-CD', parameters: [string(name: 'VERSION_TAG', value: env.NEW_VERSION)]
+            }
+        }
     }
 }
