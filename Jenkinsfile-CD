@@ -39,7 +39,7 @@ pipeline {
                           restart_policy:
                             condition: on-failure
                         volumes:
-                          - /home/ubuntu/boot-genie/boot-genie-app/boot-genie.keystore.p12:/app/boot-genie/boot-genie.keystore.p12
+                          - /home/ubuntu/boot-genie/boot-genie-app/bootgenie-https.keystore.p12:/app/boot-genie/bootgenie-https.keystore.p12
                         ports:
                           - "7435:7435"
                         environment:
