@@ -30,7 +30,7 @@ node {
               restart_policy:
                 condition: on-failure
             ports:
-              - "8080:8080"
+              - "7435:7435"
             environment:
               - JAVA_OPTS=-DprojectName=boot-genie
             logging:
