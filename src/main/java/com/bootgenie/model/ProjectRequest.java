@@ -126,4 +126,21 @@ public class ProjectRequest {
     public void setSelectedDependencies(List<Dependency> selectedDependencies) {
         this.selectedDependencies = selectedDependencies;
     }
+
+    @Override
+    public String toString() {
+        return "ProjectRequest{" +
+                "projectType='" + projectType + '\'' +
+                ", language='" + language + '\'' +
+                ", packaging='" + packaging + '\'' +
+                ", javaVersion='" + javaVersion + '\'' +
+                ", springBootVersion='" + springBootVersion + '\'' +
+                ", pattern='" + pattern + '\'' +
+                ", projectGroup='" + projectGroup + '\'' +
+                ", projectArtifact='" + projectArtifact + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", projectPackageName='" + projectPackageName + '\'' +
+                ", selectedDependencies=" + selectedDependencies +
+                '}';
+    }
 }
