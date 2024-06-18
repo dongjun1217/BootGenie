@@ -1,4 +1,4 @@
-package {BootGenie}.adapter.out.persistence;
+package {BootGenie}.adapter.output.persistence;
 
 public class UserEntity {
     private Long id;

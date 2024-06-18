@@ -1,4 +1,4 @@
-package {BootGenie}.adapter.out.persistence;
+package {BootGenie}.adapter.output.persistence;
 
 import {BootGenie}.domain.model.User;
 import {BootGenie}.domain.repository.UserRepository;

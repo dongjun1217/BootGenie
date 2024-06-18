@@ -1,7 +1,7 @@
-package {BootGenie}.infrastructure.adapter.in;
+package {BootGenie}.infrastructure.adapter.input;
 
 import {BootGenie}.domain.model.User;
-import {BootGenie}.domain.port.in.UserServicePort;
+import {BootGenie}.domain.port.input.UserServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,8 +1,8 @@
 package {BootGenie}.application.service;
 
 import {BootGenie}.domain.model.User;
-import {BootGenie}.domain.port.in.UserServicePort;
-import {BootGenie}.domain.port.out.UserRepositoryPort;
+import {BootGenie}.domain.port.input.UserServicePort;
+import {BootGenie}.domain.port.output.UserRepositoryPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

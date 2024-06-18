@@ -1,4 +1,4 @@
-package {BootGenie}.adapter.in.web;
+package {BootGenie}.adapter.input.web;
 
 import {BootGenie}.application.service.UserService;
 import {BootGenie}.domain.model.User;

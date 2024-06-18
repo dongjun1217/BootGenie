@@ -1,4 +1,4 @@
-package {BootGenie}.domain.port.out;
+package {BootGenie}.domain.port.output;
 
 import {BootGenie}.domain.model.User;
 

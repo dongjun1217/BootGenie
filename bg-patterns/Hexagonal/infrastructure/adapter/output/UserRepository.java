@@ -1,7 +1,7 @@
-package {BootGenie}.infrastructure.adapter.out;
+package {BootGenie}.infrastructure.adapter.output;
 
 import {BootGenie}.domain.model.User;
-import {BootGenie}.domain.port.out.UserRepositoryPort;
+import {BootGenie}.domain.port.output.UserRepositoryPort;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
