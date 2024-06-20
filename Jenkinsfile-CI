@@ -39,9 +39,9 @@ pipeline {
                     // docker 허브에 로그인합니다.
                     sh '''
                         echo $docker_PASSWORD | docker login -u $docker_USERNAME --password-stdin
-                        docker image tag boot-genie-app:${env.NEW_VERSION} donghyeonshin/boot-genie-app:${env.NEW_VERSION}
+                        docker image tag boot-genie-app:${NEW_VERSION} donghyeonshin/boot-genie-app:${NEW_VERSION}
                         docker image tag boot-genie-app:latest donghyeonshin/boot-genie-app:latest
-                        docker push donghyeonshin/boot-genie-app:${env.NEW_VERSION}
+                        docker push donghyeonshin/boot-genie-app:${NEW_VERSION}
                         docker push donghyeonshin/boot-genie-app:latest
                     '''
                 }
