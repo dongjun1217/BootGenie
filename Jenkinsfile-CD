@@ -9,10 +9,10 @@ pipeline {
         stage('Docker Pull') {
             steps {
                 script {
-                    def dockerImage = "110.15.58.113:8083/repository/boot-genie-app:${params.VERSION_TAG}" // 파라미터로 받은 버전 태그 사용
-                    withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                        // Nexus 레지스트리에 로그인합니다.
-                        sh 'echo $NEXUS_PASSWORD | docker login -u $NEXUS_USERNAME --password-stdin http://110.15.58.113:8083'
+                    def dockerImage = "boot-genie-app:${params.VERSION_TAG}" // 파라미터로 받은 버전 태그 사용
+                    withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'docker_USERNAME', passwordVariable: 'docker_PASSWORD')]) {
+                        // docker 레지스트리에 로그인합니다.
+                        sh 'echo $docker_PASSWORD | docker login -u $docker_USERNAME --password-stdin'
                         // 최신 Docker 이미지를 가져옵니다.
                         sh "docker pull ${dockerImage}"
                     }
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     def composeFile = "boot-genie.yml"
-                    def dockerImage = "110.15.58.113:8083/repository/boot-genie-app:${params.VERSION_TAG}"
+                    def dockerImage = "boot-genie-app:${params.VERSION_TAG}"
                     writeFile file: composeFile, text: """
                     version: '3.8'
 
