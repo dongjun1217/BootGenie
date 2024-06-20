@@ -53,6 +53,7 @@ public class BuildGradleWriter {
         buildGradleContent.append(String.format(
                 "\ndependencies {\n" +
                         "  implementation 'org.springframework.boot:spring-boot-starter'\n" +
+                        "  implementation 'org.springframework.boot:spring-boot-starter-web'\n" +
                         "  testImplementation 'org.springframework.boot:spring-boot-starter-test'\n" +
                         "  testRuntimeOnly 'org.junit.platform:junit-platform-launcher'\n" +
                         "%s\n" +
