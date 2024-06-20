@@ -35,14 +35,15 @@ pipeline {
 
         stage('Docker Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'docker_USERNAME', passwordVariable: 'docker_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'docker_USERNAME', passwordVariable: 'docker_PASSWORD')]) {
                     // docker 허브에 로그인합니다.
-                    sh 'echo $docker_PASSWORD | docker login -u $docker_USERNAME --password-stdin'
-                    // 빌드된 Docker 이미지를 docker 허브에 푸시합니다.
-                    sh "docker image tag boot-genie-app:${env.NEW_VERSION} donghyeonshin/boot-genie-app:${env.NEW_VERSION}"
-                    sh "docker image tag boot-genie-app:latest donghyeonshin/boot-genie-app:latest"
-                    sh "docker push donghyeonshin/boot-genie-app:${env.NEW_VERSION}"
-                    sh "docker push donghyeonshin/boot-genie-app:latest"
+                sh '''
+                    echo $docker_PASSWORD | docker login -u $docker_USERNAME --password-stdin
+                    docker image tag boot-genie-app:${env.NEW_VERSION} donghyeonshin/boot-genie-app:${env.NEW_VERSION}
+                    docker image tag boot-genie-app:latest donghyeonshin/boot-genie-app:latest
+                    docker push donghyeonshin/boot-genie-app:${env.NEW_VERSION}
+                    docker push donghyeonshin/boot-genie-app:latest
+                '''
                 }
             }
         }
