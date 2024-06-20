@@ -78,7 +78,6 @@ public class DependencyHandler {
             Map.entry("Spring Boot Starter Security", "  implementation 'org.springframework.boot:spring-boot-starter-security'"),
             Map.entry("Spring Boot Starter Thymeleaf", "  implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'"),
             Map.entry("Spring Boot Starter Validation", "  implementation 'org.springframework.boot:spring-boot-starter-validation'"),
-            Map.entry("Spring Boot Starter Web", "  implementation 'org.springframework.boot:spring-boot-starter-web'"),
             Map.entry("Spring Boot Starter Web Services", "  implementation 'org.springframework.boot:spring-boot-starter-web-services'"),
             Map.entry("Spring Boot Starter Webflux", "  implementation 'org.springframework.boot:spring-boot-starter-webflux'"),
             Map.entry("Spring Boot Starter Websocket", "  implementation 'org.springframework.boot:spring-boot-starter-websocket'"),
