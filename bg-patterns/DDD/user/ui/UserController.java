@@ -1,7 +1,7 @@
-package com.example.user.ui;
+package {BootGenie}.user.ui;
 
-import com.example.user.application.UserFacade;
-import com.example.user.domain.model.User;
+import {BootGenie}.user.application.UserFacade;
+import {BootGenie}.user.domain.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
