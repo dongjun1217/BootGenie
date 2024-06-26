@@ -9,7 +9,7 @@ import java.util.List;
 
 public class BuildGradleWriter {
 
-    public void writeTo(Path path, String javaVersion, String springBootVersion, String packagingType, List<String> dependencies) throws IOException {
+    public void writeTo(Path path,String projectGroup, String javaVersion, String springBootVersion, String packagingType, List<String> dependencies) throws IOException {
         DependencyHandler dependencyHandler = new DependencyHandler(dependencies);
         StringBuilder buildGradleContent = new StringBuilder();
 
@@ -21,7 +21,7 @@ public class BuildGradleWriter {
                         "%s\n" +
                         "}\n" +
                         "\n" +
-                        "group = 'com.example'\n" +
+                        "group = '%s'\n" +
                         "version = '0.0.1-SNAPSHOT'\n" +
                         "\n" +
                         "java {\n" +
@@ -30,7 +30,7 @@ public class BuildGradleWriter {
                         "\n" +
                         "repositories {\n" +
                         "  mavenCentral()\n",
-                springBootVersion, dependencyHandler.getPlugins(), javaVersion
+                springBootVersion, dependencyHandler.getPlugins(), projectGroup, javaVersion
         ));
 
         if (dependencyHandler.hasAdditionalRepositories()) {

@@ -40,6 +40,7 @@ public class ProjectController {
             ByteArrayInputStream projectStream = projectService.generateProject(
                     projectRequest.getProjectName(),
                     projectRequest.getProjectPackageName(),
+                    projectRequest.getProjectGroup(),
                     projectRequest.getPattern(),
                     projectRequest.getJavaVersion(),
                     projectRequest.getSpringBootVersion(),

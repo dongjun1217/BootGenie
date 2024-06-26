@@ -17,6 +17,7 @@ public class ProjectGenerator {
     public static ByteArrayInputStream generateProjectZip(
             String projectName,
             String packageName,
+            String projectGroup,
             String pattern,
             String javaVersion,
             String springBootVersion,
@@ -41,7 +42,7 @@ public class ProjectGenerator {
 
         // Create build.gradle file using BuildGradleWriter
         BuildGradleWriter buildGradleWriter = new BuildGradleWriter();
-        buildGradleWriter.writeTo(tempDir, javaVersion, springBootVersion, packagingType, dependencies);
+        buildGradleWriter.writeTo(tempDir, projectGroup, javaVersion, springBootVersion, packagingType, dependencies);
 
         // Create application.properties file
         createApplicationProperties(tempDir, projectName);

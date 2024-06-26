@@ -13,11 +13,12 @@ public class ProjectService {
     public ByteArrayInputStream generateProject(
             String projectName,
             String packageName,
+            String projectGroup,
             String pattern,
             String javaVersion,
             String springBootVersion,
             String packagingType,
             List<String> dependencies) throws IOException {
-        return ProjectGenerator.generateProjectZip(projectName, packageName, pattern, javaVersion, springBootVersion, packagingType, dependencies);
+        return ProjectGenerator.generateProjectZip(projectName, packageName, projectGroup, pattern, javaVersion, springBootVersion, packagingType, dependencies);
     }
 }
